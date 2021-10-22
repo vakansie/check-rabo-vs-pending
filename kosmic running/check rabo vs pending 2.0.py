@@ -19,6 +19,8 @@ generated_email_file = "Generated_emails.txt"
 payment_description_exceptions = ()
 # Transfers from these accounts are never payments for orders:
 ignore_transfers_from = ()
+
+
 class Payment:
     def __init__(self, order_number, name, amount_paid, date, description, weight_matched_order_list, match_type):
         self.name                      = name
@@ -362,7 +364,7 @@ def print_matches(matched_payments_list):
             print(payment_order_match)
 
 def check_rabo_file_vs_magento_file(download_path):
-    print('\n','-'*10, "fransie vakantie payment order match machine", ('-'*10), '\n')
+    print('\n','-'*10, "vakansie payment order match machine", ('-'*10), '\n')
     clear_old_generated_emails_file(generated_email_file)
     magento_file, rabo_file = get_rabo_and_magento_file(download_path)
     rabo_date_format = get_rabo_date_format(rabo_file)
