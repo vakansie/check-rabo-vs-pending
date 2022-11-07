@@ -5,7 +5,7 @@ import csv
 import os
 import glob
 
-SQL_file_path = 'C://Users\win 10\Desktop\mapmap\kosmic_python\kosmic running'# 'Z://downloads'
+SQL_file_path = ''
 
 
 @dataclass
@@ -29,11 +29,18 @@ class Sirius_Order:
     palladium: int = 0
     freshup: int = 0
 
+    def update_quantities(self):
+        for product in self.__dict__.keys():
+            try:
+                self.__dict__[product] = int(ui.order_var_dict[product].get())
+            except: self.__dict__[product] = 0 
+
     def to_order_dict(self):
         return {product: qty for product, qty in self.__dict__.items() if qty > 0}
 
     def prepare_email(self):
-        return update_quantities(self).to_order_dict()
+        self.update_quantities()
+        return self.to_order_dict()
 
 class UI:
     def __init__(self, order):
@@ -100,17 +107,17 @@ class UI:
         'freshup': 'freshup microdose'}
         self.order_var_dict = dict(zip(self.product_dict.keys(), self.product_vars_dict.values()))
         self.product_labels_dict = dict(zip(self.product_dict.keys(), self.label_names))
-        self.generate_general_ui_elements()
+        self.generate_main_ui_elements()
         self.generate_product_ui_elements()
         self.bind_keys()
 
-    def generate_general_ui_elements(self):
+    def generate_main_ui_elements(self):
         self.generate_button = tk.Button(self.window, text='Generate Email', command=lambda: write_email(self.order.prepare_email())).grid(row=len(self.product_dict)+2,column=0)
-        self.reset_button = tk.Button(self.window, text='Reset', command=lambda: reset_quantities()).grid(row=len(self.product_dict)+2,column=1)
+        self.reset_button = tk.Button(self.window, text='Reset', command=lambda: self.reset_ui()).grid(row=len(self.product_dict)+2,column=1)
         self.import_button = tk.Button(self.window, text='Add Products From Processing Orders', command=lambda: add_from_file()).grid(row=len(self.product_dict)+2,column=2)
-        self.email_field = tk.Text(self.window, height = 25, width = 60, font=('calibre',10))
+        self.email_field = tk.Text(self.window, height = 28, width = 60, font=('calibre',12))
         self.email_field.grid(row=0, rowspan=len(self.product_dict),column=2)
-        self.file_field = tk.Text(self.window, height = 1, width = 60, font=('calibre',8))
+        self.file_field = tk.Text(self.window, height = 1, width = 60, font=('calibre',12))
         self.file_field.grid(row=len(self.product_dict)+1, column=2)
 
     def generate_product_vars(self):
@@ -127,28 +134,35 @@ class UI:
             self.product_labels[product].grid(row=position, column=0)
 
     def bind_keys(self):
-        self.window.bind("R", lambda x: reset_quantities())
+        self.window.bind("R", lambda x: self.reset_ui())
         self.window.bind("F", lambda x: add_from_file())
         self.window.bind("<Return>", lambda x: write_email(self.order.prepare_email()))
 
-def update_quantities(order):
-    for product in order.__dict__.keys():
-        try:
-            order.__dict__[product] = int(ui.order_var_dict[product].get())
-        except: order.__dict__[product] = 0 
-    return order
+    def reset_ui(self):
+        for entry_var in self.product_vars_dict.values():
+            entry_var.set(0)
+        self.center_nonzero_quantities()
+        self.clear_text_fields()
 
-def reset_quantities():
-    for entry_var in ui.product_vars_dict.values():
-        entry_var.set(0)
+    def clear_text_fields(self):
+        self.file_field.delete(1.0,tk.END)
+        self.email_field.delete(1.0,tk.END)
+
+    def center_nonzero_quantities(self):
+        self.order.update_quantities()
+        for product in self.product_entries:
+            text_align = ('center' if self.order.__dict__[product] > 0 else 'left')
+            self.product_entries[product]['justify'] = text_align
+            self.window.update()
 
 def get_SQL_file(SQL_file_path):
         possible_files = glob.glob(SQL_file_path+'\\sales_order*.csv')
         try:
             SQL_file = max(possible_files, key=os.path.getctime)
-            ui.file_field.insert(tk.END, f'file used: {SQL_file}')
+            ui.file_field.delete(1.0,tk.END)
+            ui.file_field.insert(tk.END, f'file used: {SQL_file[-20:]}')
             return SQL_file
-        except ValueError: 
+        except ValueError:
             ui.file_field.insert(tk.END,'ERROR: no SQL file found. Run: Generate Databse Query.bat')
             return
 
@@ -170,14 +184,16 @@ def tally_products(SQL_file):
 
 def add_to_fields(product_tally):
     for product, qty in product_tally.items():
-        if isinstance(ui.product_vars_dict[product].get(), int):
-            ui.product_vars_dict[product].set((ui.product_vars_dict[product].get() + qty))
+        try: ui.product_vars_dict[product].set((ui.product_vars_dict[product].get() + qty))
+        except: ui.product_vars_dict[product].set(0 + qty)
 
 def add_from_file():
     SQL_file = get_SQL_file(SQL_file_path)
     if not SQL_file: return
     product_tally = tally_products(SQL_file)
     add_to_fields(product_tally)
+    ui.center_nonzero_quantities()
+    write_email(ui.order.prepare_email())
 
 def write_email(ordered_products):
     ui.email_field.delete(1.0,tk.END)
@@ -185,6 +201,7 @@ def write_email(ordered_products):
     for product, quantity in ordered_products.items():
             ui.email_field.insert(tk.END, f'\n{quantity:>5} {ui.product_dict[product]:^5}')
     ui.email_field.insert(tk.END, '\n\nGroeten,\nFrans')
+    ui.center_nonzero_quantities()
 
 def main():
     global ui
