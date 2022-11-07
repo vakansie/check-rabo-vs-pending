@@ -5,7 +5,7 @@ import csv
 import os
 import glob
 
-SQL_file_path = ''
+SQL_file_path = 'C://Users\win 10\Desktop\mapmap\kosmic_python\kosmic running'# 'Z://downloads'
 
 
 @dataclass
@@ -40,123 +40,45 @@ class UI:
         self.window = tk.Tk()
         self.window.title('Sirius Email Generator')
         self.order = order
-        self.shuttles_to_order = tk.IntVar(self.window, value=0)
-        self.shuttles_entry = tk.Entry(self.window,name='shuttles', textvariable=self.shuttles_to_order)
-        self.shuttles_label = tk.Label(self.window, text = 'Space Shuttles', font=('calibre',10, 'bold'))
-        self.shuttles_label.grid(row=0,column=0)
-        self.shuttles_entry.grid(row=0,column=1)
-        self.dolphins_to_order = tk.IntVar(self.window, value=0)
-        self.dolphins_entry = tk.Entry(self.window,name='dolphins', textvariable=self.dolphins_to_order)
-        self.dolphins_label = tk.Label(self.window, text = 'Dolphins', font=('calibre',10, 'bold'))
-        self.dolphins_label.grid(row=1,column=0)
-        self.dolphins_entry.grid(row=1,column=1)
-        self.teachers_to_order = tk.IntVar(self.window, value=0)
-        self.teachers_entry = tk.Entry(self.window,name='teachers', textvariable=self.teachers_to_order)
-        self.teachers_label = tk.Label(self.window, text = 'Golden Teachers', font=('calibre',10, 'bold'))
-        self.teachers_label.grid(row=2,column=0)
-        self.teachers_entry.grid(row=2,column=1)
-        self.connectors_to_order = tk.IntVar(self.window, value=0)
-        self.connectors_entry = tk.Entry(self.window,name='connectors', textvariable=self.connectors_to_order)
-        self.connectors_label = tk.Label(self.window, text = 'Cosmic Connectors', font=('calibre',10, 'bold'))
-        self.connectors_label.grid(row=3,column=0)
-        self.connectors_entry.grid(row=3,column=1)
-        self.rain_to_order = tk.IntVar(self.window, value=0)
-        self.rain_entry = tk.Entry(self.window,name='rain', textvariable=self.rain_to_order)
-        self.rain_label = tk.Label(self.window, text = 'Purple Rain', font=('calibre',10, 'bold'))
-        self.rain_label.grid(row=4,column=0)
-        self.rain_entry.grid(row=4,column=1)
-        self.diamonds_to_order = tk.IntVar(self.window, value=0)
-        self.diamonds_entry = tk.Entry(self.window,name='diamonds', textvariable=self.diamonds_to_order)
-        self.diamonds_label = tk.Label(self.window, text = 'White Diamonds', font=('calibre',10, 'bold'))
-        self.diamonds_label.grid(row=5,column=0)
-        self.diamonds_entry.grid(row=5,column=1)
-        self.beluga_to_order = tk.IntVar(self.window, value=0)
-        self.beluga_entry = tk.Entry(self.window,name='beluga', textvariable=self.beluga_to_order)
-        self.beluga_label = tk.Label(self.window, text = 'Royal Beluga', font=('calibre',10, 'bold'))
-        self.beluga_label.grid(row=6,column=0)
-        self.beluga_entry.grid(row=6,column=1)
-        self.mothers_10g_to_order = tk.IntVar(self.window, value=0)
-        self.mothers_10g_entry = tk.Entry(self.window,name='mothers_10g', textvariable=self.mothers_10g_to_order)
-        self.mothers_10g_label = tk.Label(self.window, text = 'Mothers Finest 10g', font=('calibre',10, 'bold'))
-        self.mothers_10g_label.grid(row=7,column=0)
-        self.mothers_10g_entry.grid(row=7,column=1)
-        self.mothers_15g_to_order = tk.IntVar(self.window, value=0)
-        self.mothers_15g_entry = tk.Entry(self.window,name='mothers 15g', textvariable=self.mothers_15g_to_order)
-        self.mothers_15g_label = tk.Label(self.window, text = 'Mothers Finest 15g', font=('calibre',10, 'bold'))
-        self.mothers_15g_label.grid(row=8,column=0)
-        self.mothers_15g_entry.grid(row=8,column=1)
-        self.mix_green_to_order = tk.IntVar(self.window, value=0)
-        self.mix_green_entry = tk.Entry(self.window,name='mix green', textvariable=self.mix_green_to_order)
-        self.mix_green_label = tk.Label(self.window, text = 'Mystery Mix Green', font=('calibre',10, 'bold'))
-        self.mix_green_label.grid(row=9,column=0)
-        self.mix_green_entry.grid(row=9,column=1)
-        self.mix_orange_to_order = tk.IntVar(self.window, value=0)
-        self.mix_orange_entry = tk.Entry(self.window,name='mix_orange', textvariable=self.mix_orange_to_order)
-        self.mix_orange_label = tk.Label(self.window, text = 'Mystery Mix Orange', font=('calibre',10, 'bold'))
-        self.mix_orange_label.grid(row=10,column=0)
-        self.mix_orange_entry.grid(row=10,column=1)
-        self.mix_purple_10g_to_order = tk.IntVar(self.window, value=0)
-        self.mix_purple_10g_entry = tk.Entry(self.window,name='mix purple 10g', textvariable=self.mix_purple_10g_to_order)
-        self.mix_purple_10g_label = tk.Label(self.window, text = 'Mystery Mix Purple 10g', font=('calibre',10, 'bold'))
-        self.mix_purple_10g_label.grid(row=11,column=0)
-        self.mix_purple_10g_entry.grid(row=11,column=1)
-        self.mix_purple_15g_to_order = tk.IntVar(self.window, value=0)
-        self.mix_purple_15g_entry = tk.Entry(self.window,name='mix purple 15g', textvariable=self.mix_purple_15g_to_order)
-        self.mix_purple_15g_label = tk.Label(self.window, text = 'Mystery Mix Purple 15g', font=('calibre',10, 'bold'))
-        self.mix_purple_15g_label.grid(row=12,column=0)
-        self.mix_purple_15g_entry.grid(row=12,column=1)
-        self.bronze_to_order = tk.IntVar(self.window, value=0)
-        self.bronze_entry = tk.Entry(self.window,name='bronze', textvariable=self.bronze_to_order)
-        self.bronze_label = tk.Label(self.window, text = 'Bronze', font=('calibre',10, 'bold'))
-        self.bronze_label.grid(row=13,column=0)
-        self.bronze_entry.grid(row=13,column=1)
-        self.silver_to_order = tk.IntVar(self.window, value=0)
-        self.silver_entry = tk.Entry(self.window,name='silver', textvariable=self.silver_to_order)
-        self.silver_label = tk.Label(self.window, text = 'Silver', font=('calibre',10, 'bold'))
-        self.silver_label.grid(row=14,column=0)
-        self.silver_entry.grid(row=14,column=1)
-        self.gold_to_order = tk.IntVar(self.window, value=0)
-        self.gold_entry = tk.Entry(self.window,name='gold', textvariable=self.gold_to_order)
-        self.gold_label = tk.Label(self.window, text = 'Gold', font=('calibre',10, 'bold'))
-        self.gold_label.grid(row=15,column=0)
-        self.gold_entry.grid(row=15,column=1)
-        self.palladium_to_order = tk.IntVar(self.window, value=0)
-        self.palladium_entry = tk.Entry(self.window,name='palladium', textvariable=self.palladium_to_order)
-        self.palladium_label = tk.Label(self.window, text='Palladium', font=('calibre',10, 'bold'))
-        self.palladium_label.grid(row=16,column=0)
-        self.palladium_entry.grid(row=16,column=1)
-        self.freshup_to_order = tk.IntVar(self.window, value=0)
-        self.freshup_entry = tk.Entry(self.window,name='freshup', textvariable=self.freshup_to_order)
-        self.freshup_label = tk.Label(self.window, text='FreshUp Microdosing', font=('calibre',10, 'bold'))
-        self.freshup_label.grid(row=17,column=0)
-        self.freshup_entry.grid(row=17,column=1)
-        self.bind_keys()
-        self.generate_button = tk.Button(self.window, text='Generate Email', command=lambda: write_email(order.prepare_email())).grid(row=19,column=0)
-        self.reset_button = tk.Button(self.window, text='Reset', command=lambda: reset_quantities()).grid(row=19,column=1)
-        self.import_button = tk.Button(self.window, text='Add Products From Processing Orders', command=lambda: import_from_file()).grid(row=19,column=2)
-        self.email_field = tk.Text(self.window, height = 25, width = 60, font=('calibre',10))
-        self.email_field.grid(row=0, rowspan=17,column=2)
-        self.file_field = tk.Text(self.window, height = 1, width = 60, font=('calibre',8))
-        self.file_field.grid(row=18, column=2)
+        self.product_vars = {}
+        self.generate_product_vars()
+        self.label_names = ['Space Shuttles',
+                            'Dolphins',
+                            'Golden Teachers',
+                            'Cosmic Connectors',
+                            'Purple Rain',
+                            'White Diamonds',
+                            'Royal Beluga',
+                            'Mothers Finest 10g',
+                            'Mothers Finest 15g',
+                            'Mystery Mix Green',
+                            'Mystery Mix Orange',
+                            'Mystery Mix Purple 10g',
+                            'Mystery Mix Purple 15g',
+                            'Bronze',
+                            'Silver',
+                            'Gold',
+                            'Palladium',
+                            'FreshUp Microdosing']
         self.product_vars_dict = {
-        'Space Shuttles Truffles': self.shuttles_to_order,
-        'Dolphins Delight Truffles': self.dolphins_to_order,
-        'Golden Teacher Truffles': self.teachers_to_order,
-        'Cosmic Connectors Truffles': self.connectors_to_order,
-        'Purple Rain Truffles-15 grams': self.rain_to_order,
-        'White Diamonds Truffles-15 grams': self.diamonds_to_order,
-        'Royal Beluga Truffles-15 grams': self.beluga_to_order,
-        'Mothers Finest Truffles -10 grams': self.mothers_10g_to_order,
-        'Mothers Finest Truffles 15 grams': self.mothers_15g_to_order,
-        'Mystery Mix Green Truffles': self.mix_green_to_order,
-        'Mystery Mix Orange Truffles': self.mix_orange_to_order,
-        'Mystery Mix Purple Truffles-10 grams': self.mix_purple_10g_to_order,
-        'Mystery Mix Purple Truffles-15 grams': self.mix_purple_15g_to_order,
-        'Bronze Truffles': self.bronze_to_order,
-        'Silver Truffles': self.silver_to_order,
-        'Gold Truffles': self.gold_to_order,
-        'Palladium Truffles': self.palladium_to_order,
-        'FreshUp Microdosing': self.freshup_to_order}
+        'Space Shuttles Truffles': self.product_vars['shuttles'],
+        'Dolphins Delight Truffles': self.product_vars['dolphins'],
+        'Golden Teacher Truffles': self.product_vars['teachers'],
+        'Cosmic Connectors Truffles': self.product_vars['connectors'],
+        'Purple Rain Truffles-15 grams': self.product_vars['rain'],
+        'White Diamonds Truffles-15 grams': self.product_vars['diamonds'],
+        'Royal Beluga Truffles-15 grams': self.product_vars['beluga'],
+        'Mothers Finest Truffles -10 grams': self.product_vars['mothers_10g'],
+        'Mothers Finest Truffles 15 grams': self.product_vars['mothers_15g'],
+        'Mystery Mix Green Truffles': self.product_vars['mix_green'],
+        'Mystery Mix Orange Truffles': self.product_vars['mix_orange'],
+        'Mystery Mix Purple Truffles-10 grams': self.product_vars['mix_purple_10g'],
+        'Mystery Mix Purple Truffles-15 grams': self.product_vars['mix_purple_15g'],
+        'Bronze Truffles': self.product_vars['bronze'],
+        'Silver Truffles': self.product_vars['silver'],
+        'Gold Truffles': self.product_vars['gold'],
+        'Palladium Truffles': self.product_vars['palladium'],
+        'FreshUp Microdosing': self.product_vars['freshup']}
         self.product_dict = {
         'shuttles': 'shuttles',
         'dolphins': 'dolphins',
@@ -177,10 +99,36 @@ class UI:
         'palladium': 'palladium',
         'freshup': 'freshup microdose'}
         self.order_var_dict = dict(zip(self.product_dict.keys(), self.product_vars_dict.values()))
+        self.product_labels_dict = dict(zip(self.product_dict.keys(), self.label_names))
+        self.generate_general_ui_elements()
+        self.generate_product_ui_elements()
+        self.bind_keys()
+
+    def generate_general_ui_elements(self):
+        self.generate_button = tk.Button(self.window, text='Generate Email', command=lambda: write_email(self.order.prepare_email())).grid(row=len(self.product_dict)+2,column=0)
+        self.reset_button = tk.Button(self.window, text='Reset', command=lambda: reset_quantities()).grid(row=len(self.product_dict)+2,column=1)
+        self.import_button = tk.Button(self.window, text='Add Products From Processing Orders', command=lambda: add_from_file()).grid(row=len(self.product_dict)+2,column=2)
+        self.email_field = tk.Text(self.window, height = 25, width = 60, font=('calibre',10))
+        self.email_field.grid(row=0, rowspan=len(self.product_dict),column=2)
+        self.file_field = tk.Text(self.window, height = 1, width = 60, font=('calibre',8))
+        self.file_field.grid(row=len(self.product_dict)+1, column=2)
+
+    def generate_product_vars(self):
+        for product in self.order.__dict__.keys():
+            self.product_vars[product] = tk.IntVar(self.window, value=0)
+
+    def generate_product_ui_elements(self):
+        self.product_entries = {}
+        self.product_labels = {}
+        for position, product in enumerate(self.order.__dict__.keys()):
+            self.product_entries[product] = tk.Entry(self.window,name=self.product_dict[product], textvariable=self.product_vars[product])
+            self.product_labels[product] = tk.Label(self.window, text=self.product_labels_dict[product], font=('calibre',10, 'bold'))
+            self.product_entries[product].grid(row=position, column=1)
+            self.product_labels[product].grid(row=position, column=0)
 
     def bind_keys(self):
         self.window.bind("R", lambda x: reset_quantities())
-        self.window.bind("F", lambda x: import_from_file())
+        self.window.bind("F", lambda x: add_from_file())
         self.window.bind("<Return>", lambda x: write_email(self.order.prepare_email()))
 
 def update_quantities(order):
@@ -220,31 +168,23 @@ def tally_products(SQL_file):
             except KeyError as key: print(f'KeyError: something changed in the csv file headers. missing header: {key}')
         return product_tally
 
-def set_fields(product_tally):
+def add_to_fields(product_tally):
     for product, qty in product_tally.items():
         if isinstance(ui.product_vars_dict[product].get(), int):
             ui.product_vars_dict[product].set((ui.product_vars_dict[product].get() + qty))
 
-def import_from_file():
+def add_from_file():
     SQL_file = get_SQL_file(SQL_file_path)
     if not SQL_file: return
     product_tally = tally_products(SQL_file)
-    set_fields(product_tally)
+    add_to_fields(product_tally)
 
 def write_email(ordered_products):
     ui.email_field.delete(1.0,tk.END)
-    ui.email_field.insert(tk.END, '''
-Hoi Paulette,
-
-Ik zou graag bestellen:
-''')
+    ui.email_field.insert(tk.END, 'Hoi Paulette,\n\nIk zou graag bestellen:\n')
     for product, quantity in ordered_products.items():
             ui.email_field.insert(tk.END, f'\n{quantity:>5} {ui.product_dict[product]:^5}')
-    ui.email_field.insert(tk.END, '''
-
-Groeten,
-Frans
-''')
+    ui.email_field.insert(tk.END, '\n\nGroeten,\nFrans')
 
 def main():
     global ui
