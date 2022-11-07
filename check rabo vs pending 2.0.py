@@ -1,4 +1,4 @@
-            ###  fransie vakantie payment order match machine ###
+            ### vakansie payment order match machine ###
 
 ###  matches rabo payments to magento orders by comparing downloaded csv files ###
 
