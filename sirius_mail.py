@@ -5,7 +5,7 @@ import csv
 import os
 import glob
 
-SQL_file_path = 'C://Users\win 10\Desktop\mapmap\kosmic_python\kosmic running'# 'Z://downloads'
+SQL_file_path = ''
 
 
 @dataclass
@@ -197,10 +197,10 @@ def add_from_file():
 
 def write_email(ordered_products):
     ui.email_field.delete(1.0,tk.END)
-    ui.email_field.insert(tk.END, 'Hoi Paulette,\n\nIk zou graag bestellen:\n')
+    ui.email_field.insert(tk.END, 'Hoi ,\n\nIk zou graag bestellen:\n')
     for product, quantity in ordered_products.items():
             ui.email_field.insert(tk.END, f'\n{quantity:>5} {ui.product_dict[product]:^5}')
-    ui.email_field.insert(tk.END, '\n\nGroeten,\nFrans')
+    ui.email_field.insert(tk.END, '\n\nGroeten,\n')
     ui.center_nonzero_quantities()
 
 def main():
