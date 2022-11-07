@@ -29,6 +29,12 @@ class Sirius_Order:
     palladium: int = 0
     freshup: int = 0
 
+    def to_order_dict(self):
+        return {product: qty for product, qty in self.__dict__.items() if qty != 0}
+
+    def sanitize(self):
+        return get_quantities(self).to_order_dict()
+
 class UI:
     def __init__(self, order):
         self.window = tk.Tk()
@@ -125,7 +131,7 @@ class UI:
         self.freshup_label.grid(row=17,column=0)
         self.freshup_entry.grid(row=17,column=1)
         self.bind_keys()
-        self.generate_button = tk.Button(self.window, text='Generate Email', command=lambda: write_email(order)).grid(row=19,column=0)
+        self.generate_button = tk.Button(self.window, text='Generate Email', command=lambda: write_email(order.sanitize())).grid(row=19,column=0)
         self.reset_button = tk.Button(self.window, text='Reset', command=lambda: reset_quantities()).grid(row=19,column=1)
         self.import_button = tk.Button(self.window, text='Add Products From Processing Orders', command=lambda: import_from_file()).grid(row=19,column=2)
         self.email_field = tk.Text(self.window, height = 25, width = 60, font=('calibre',10))
@@ -152,52 +158,30 @@ class UI:
         'Palladium Truffles': self.palladium_to_order,
         'FreshUp Microdosing': self.freshup_to_order}
         self.product_dict = {
-    'shuttles': 'shuttles',
-    'dolphins': 'dolphins',
-    'teachers': 'teachers',
-    'connectors': 'connectors',
-    'rain': 'rain',
-    'diamonds': 'diamonds',
-    'beluga': 'beluga',
-    'mothers_10g': 'mothers 10g',
-    'mothers_15g': 'mothers 15g',
-    'mix_green': 'mystery mix green',
-    'mix_orange': 'mystery mix orange',
-    'mix_purple_10g': 'mystery mix purple 10g',
-    'mix_purple_15g': 'mystery mix purple 15g',
-    'bronze': 'bronze',
-    'silver': 'silver',
-    'gold': 'gold',
-    'palladium': 'palladium',
-    'freshup': 'freshup microdose'}
+        'shuttles': 'shuttles',
+        'dolphins': 'dolphins',
+        'teachers': 'teachers',
+        'connectors': 'connectors',
+        'rain': 'rain',
+        'diamonds': 'diamonds',
+        'beluga': 'beluga',
+        'mothers_10g': 'mothers 10g',
+        'mothers_15g': 'mothers 15g',
+        'mix_green': 'mystery mix green',
+        'mix_orange': 'mystery mix orange',
+        'mix_purple_10g': 'mystery mix purple 10g',
+        'mix_purple_15g': 'mystery mix purple 15g',
+        'bronze': 'bronze',
+        'silver': 'silver',
+        'gold': 'gold',
+        'palladium': 'palladium',
+        'freshup': 'freshup microdose'}
         self.order_var_dict = dict(zip(self.product_dict.keys(), self.product_vars_dict.values()))
 
     def bind_keys(self):
         self.window.bind("R", lambda x: reset_quantities())
         self.window.bind("F", lambda x: import_from_file())
-        self.window.bind("<Return>", lambda x: write_email(self.order))
-
-    def create_structure(self):
-        pass
-
-def write_email(order):
-    ui.email_field
-    ui.email_field.delete(1.0,tk.END)
-    order = get_quantities(order)
-    ui.email_field.insert(tk.END, '''
-Hoi Paulette,
-
-Ik zou graag bestellen:
-''')
-    for product, quantity in order.__dict__.items():
-        if quantity != 0:
-            ui.email_field.insert(tk.END, f'\n{quantity:>5} {ui.product_dict[product]:^5}')
-
-    ui.email_field.insert(tk.END, '''
-
-Groeten,
-Frans
-''')
+        self.window.bind("<Return>", lambda x: write_email(self.order.sanitize()))
 
 def get_quantities(order):
     for product in order.__dict__.keys():
@@ -245,6 +229,21 @@ def import_from_file():
     SQL_file = get_SQL_file(SQL_file_path)
     product_tally = tally_products(SQL_file)
     set_fields(product_tally)
+
+def write_email(ordered_products):
+    ui.email_field.delete(1.0,tk.END)
+    ui.email_field.insert(tk.END, '''
+Hoi Paulette,
+
+Ik zou graag bestellen:
+''')
+    for product, quantity in ordered_products.items():
+            ui.email_field.insert(tk.END, f'\n{quantity:>5} {ui.product_dict[product]:^5}')
+    ui.email_field.insert(tk.END, '''
+
+Groeten,
+Frans
+''')
 
 def main():
     global ui
