@@ -11,19 +11,19 @@ import time
 from operator import attrgetter
 from fuzzywuzzy import fuzz
 
-download_path = 'C://Users\win 10\Desktop\mapmap\kosmic_python\kosmic running'# 'Z://downloads'
+download_path = ''
 
 generated_email_file = "Generated_emails.txt"
 
 # These payment providers put the customer name 1 cell further to the right:
-payment_description_exceptions = ('THE CURRENCY CLOUD LIMITED', 'TransferWise', 'NATIONWIDE BUILDING SOCIETY', 'WORLDPAY AP LTD', 'PFC TECHNOLOGY AB (PUBL)')
+payment_description_exceptions = ()
 
 # Transfers from these accounts are never payments for orders:
-ignore_transfers_from = ('EBISU B.V.', 'STICHTING PAY.NL', 'TEN HAG ASS ADV BV', 'DE AMERSFOORTSE VERZ', 'ADP LOGISTICS', 'AAB RETAIL INZ TIKKIE','GENERAL LOGISTICS SYSTEMS NETH ERLANDS BV', '')
+ignore_transfers_from = ()
 
-gls_orders = ('DK', 'IE', 'FR', 'PT', 'ES')
+gls_orders = ()
 
-parcel_countries = ('NL', 'DE', 'AT', 'PL', 'CZ', 'HR', 'BG', 'SI', 'SK', 'HU', 'FI')
+parcel_countries = ()
 
 class Payment:
     def __init__(self, order_number, name, amount_paid, date, description, weight_matched_order_list, match_type):
