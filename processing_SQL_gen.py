@@ -4,7 +4,7 @@ import os
 import time
 import glob
 
-magento_processing_file_path = 'Z://downloads' 
+magento_processing_file_path = '' 
 
 SQL_template = """
 SELECT 
