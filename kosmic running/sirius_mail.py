@@ -199,10 +199,10 @@ def get_SQL_file(SQL_file_path):
         try:
             SQL_file = max(possible_files, key=os.path.getctime)
             ui.file_field.insert(tk.END, f'file used: {SQL_file}')
+            return SQL_file
         except ValueError: 
             ui.file_field.insert(tk.END,'ERROR: no SQL file found. Run: Generate Databse Query.bat')
-            SQL_file = get_SQL_file(SQL_file_path)
-        return SQL_file
+            return
 
 def tally_products(SQL_file):
     product_tally = Counter()
@@ -227,6 +227,7 @@ def set_fields(product_tally):
 
 def import_from_file():
     SQL_file = get_SQL_file(SQL_file_path)
+    if not SQL_file: return
     product_tally = tally_products(SQL_file)
     set_fields(product_tally)
 
