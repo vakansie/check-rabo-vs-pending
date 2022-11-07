@@ -30,10 +30,10 @@ class Sirius_Order:
     freshup: int = 0
 
     def to_order_dict(self):
-        return {product: qty for product, qty in self.__dict__.items() if qty != 0}
+        return {product: qty for product, qty in self.__dict__.items() if qty > 0}
 
-    def sanitize(self):
-        return get_quantities(self).to_order_dict()
+    def prepare_email(self):
+        return update_quantities(self).to_order_dict()
 
 class UI:
     def __init__(self, order):
@@ -131,7 +131,7 @@ class UI:
         self.freshup_label.grid(row=17,column=0)
         self.freshup_entry.grid(row=17,column=1)
         self.bind_keys()
-        self.generate_button = tk.Button(self.window, text='Generate Email', command=lambda: write_email(order.sanitize())).grid(row=19,column=0)
+        self.generate_button = tk.Button(self.window, text='Generate Email', command=lambda: write_email(order.prepare_email())).grid(row=19,column=0)
         self.reset_button = tk.Button(self.window, text='Reset', command=lambda: reset_quantities()).grid(row=19,column=1)
         self.import_button = tk.Button(self.window, text='Add Products From Processing Orders', command=lambda: import_from_file()).grid(row=19,column=2)
         self.email_field = tk.Text(self.window, height = 25, width = 60, font=('calibre',10))
@@ -181,9 +181,9 @@ class UI:
     def bind_keys(self):
         self.window.bind("R", lambda x: reset_quantities())
         self.window.bind("F", lambda x: import_from_file())
-        self.window.bind("<Return>", lambda x: write_email(self.order.sanitize()))
+        self.window.bind("<Return>", lambda x: write_email(self.order.prepare_email()))
 
-def get_quantities(order):
+def update_quantities(order):
     for product in order.__dict__.keys():
         try:
             order.__dict__[product] = int(ui.order_var_dict[product].get())
