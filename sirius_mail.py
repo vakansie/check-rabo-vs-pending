@@ -7,6 +7,10 @@ import glob
 
 SQL_file_path = ''
 
+@dataclass
+class Seller:
+    email_address: str
+    email_receiver: str
 
 @dataclass
 class Sirius_Order:
@@ -35,8 +39,14 @@ class Sirius_Order:
                 self.__dict__[product] = int(ui.order_var_dict[product].get())
             except: self.__dict__[product] = 0 
 
+    def check_single_item_plurals(name, qty):
+        return qty == 1 and name[-1] == 's'
+
+    def fix_single_item_plurals(order_dict):
+        return {(name[0: len(name) - 1]) if Sirius_Order.check_single_item_plurals(name, qty) else name: qty for name, qty in order_dict.items()}
+
     def to_order_dict(self):
-        return {product: qty for product, qty in self.__dict__.items() if qty > 0}
+        return Sirius_Order.fix_single_item_plurals({ui.product_dict[product]: qty for product, qty in self.__dict__.items() if qty > 0})
 
     def prepare_email(self):
         self.update_quantities()
@@ -110,6 +120,7 @@ class UI:
         self.generate_main_ui_elements()
         self.generate_product_ui_elements()
         self.bind_keys()
+        self.bind_entry_focus()
 
     def generate_main_ui_elements(self):
         self.generate_button = tk.Button(self.window, text='Generate Email', command=lambda: write_email(self.order.prepare_email())).grid(row=len(self.product_dict)+2,column=0)
@@ -122,7 +133,7 @@ class UI:
 
     def generate_product_vars(self):
         for product in self.order.__dict__.keys():
-            self.product_vars[product] = tk.IntVar(self.window, value=0)
+            self.product_vars[product] = tk.StringVar(self.window, value=0)
 
     def generate_product_ui_elements(self):
         self.product_entries = {}
@@ -132,11 +143,20 @@ class UI:
             self.product_labels[product] = tk.Label(self.window, text=self.product_labels_dict[product], font=('calibre',10, 'bold'))
             self.product_entries[product].grid(row=position, column=1)
             self.product_labels[product].grid(row=position, column=0)
+        list(self.product_entries.values())[0].focus_set()
+        list(self.product_entries.values())[0].selection_range(0,2)
 
     def bind_keys(self):
         self.window.bind("R", lambda x: self.reset_ui())
         self.window.bind("F", lambda x: add_from_file())
         self.window.bind("<Return>", lambda x: write_email(self.order.prepare_email()))
+
+    def bind_entry_focus(self):
+        for product in self.product_entries:
+            self.product_entries[product].bind("<FocusIn>", UI.focus_func_gen(self.product_entries[product]))
+
+    def focus_func_gen(entry):
+        return lambda event: UI.select_on_click(entry)
 
     def reset_ui(self):
         for entry_var in self.product_vars_dict.values():
@@ -154,6 +174,9 @@ class UI:
             text_align = ('center' if self.order.__dict__[product] > 0 else 'left')
             self.product_entries[product]['justify'] = text_align
             self.window.update()
+
+    def select_on_click(entry):
+        entry.selection_range(0, 5)
 
 def get_SQL_file(SQL_file_path):
         possible_files = glob.glob(SQL_file_path+'\\sales_order*.csv')
@@ -184,7 +207,7 @@ def tally_products(SQL_file):
 
 def add_to_fields(product_tally):
     for product, qty in product_tally.items():
-        try: ui.product_vars_dict[product].set((ui.product_vars_dict[product].get() + qty))
+        try: ui.product_vars_dict[product].set((int(ui.product_vars_dict[product].get()) + qty))
         except: ui.product_vars_dict[product].set(0 + qty)
 
 def add_from_file():
@@ -197,10 +220,10 @@ def add_from_file():
 
 def write_email(ordered_products):
     ui.email_field.delete(1.0,tk.END)
-    ui.email_field.insert(tk.END, 'Hoi ,\n\nIk zou graag bestellen:\n')
+    ui.email_field.insert(tk.END, 'Hoi Paulette,\n\nIk zou graag bestellen:\n')
     for product, quantity in ordered_products.items():
-            ui.email_field.insert(tk.END, f'\n{quantity:>5} {ui.product_dict[product]:^5}')
-    ui.email_field.insert(tk.END, '\n\nGroeten,\n')
+        ui.email_field.insert(tk.END, f'\n{quantity:>5} {product:^5}')
+    ui.email_field.insert(tk.END, '\n\nGroeten,\nFrans')
     ui.center_nonzero_quantities()
 
 def main():
