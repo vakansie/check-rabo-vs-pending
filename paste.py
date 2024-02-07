@@ -3,14 +3,13 @@ from tkinter import simpledialog
 import pyautogui
 from time import sleep
 import csv
+from typing import Callable
 
 phrases_file = 'phrases.csv'
 
 class UI:
     def __init__(self):
         self.window = tk.Tk()
-        self.buttons = []
-        self.labels = []
         self.window.title("Pasty Paste")
         self.create_elements()
         self.add_button = tk.Button(self.window, text='Add Line', command= lambda: self.add_line())
@@ -21,9 +20,7 @@ class UI:
     def create_elements(self):
         for position, phrase in enumerate(phrases.keys()):
             label = tk.Label(self.window, text=phrase, font=('calibre',10, 'bold'))
-            self.labels.append(label)
             button = tk.Button(self.window, text='Alt Tab and Paste', command= paste_func_gen(phrase))
-            self.buttons.append(button)
             label.grid(row=position, column=0)
             button.grid(row=position, column=1)
 
@@ -38,17 +35,17 @@ class UI:
         ui.window.destroy()
         main()
 
-def get_new_phrase():
+def get_new_phrase() -> str:
     root = tk.Tk()
     root.withdraw()
     name = simpledialog.askstring("Input", "Enter Short Description:")
     sentence = simpledialog.askstring("Input", "Enter sentence to be pasted:")
-    if not name and sentence: return ''
+    if not name or not sentence: return ''
     response = f'"{name}","{sentence}"'
     tk.messagebox.showinfo("Added:", response)
     return response
 
-def paste_func_gen(text):
+def paste_func_gen(text) -> Callable:
     def paste():
         pyautogui.hotkey('alt', 'tab')
         sleep(0.1)
