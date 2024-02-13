@@ -36,7 +36,6 @@ class UI:
 
     def refresh(self):
         self.window.destroy()
-        # self.phrases = {}
         main()
 
 def get_new_phrase():
