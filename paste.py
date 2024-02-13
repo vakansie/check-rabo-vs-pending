@@ -31,6 +31,7 @@ class UI:
         short_description, phrase = get_new_phrase()
         if not short_description or not phrase: return
         add_phrase_to_database(short_description, phrase)
+        self.refresh()
 
     def refresh(self):
         self.window.destroy()
