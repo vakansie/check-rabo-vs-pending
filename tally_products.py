@@ -106,7 +106,6 @@ def fetch_processing_order_data():
             customer_name = f"{order_info['customer_firstname']} {order_info['customer_lastname']}"
             key = f"{order_info['order_number']} - {customer_name} - {order_info['customer_email']}"
             comment_dict[key] = order_info['customer_comment']
-        print(order_info)
         orders.append(order_info)
     return orders, comment_dict
     
