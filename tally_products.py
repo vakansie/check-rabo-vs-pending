@@ -48,16 +48,12 @@ def sort_by_seller(product_tally):
         for product, qty in product_tally.items():
             if manufacturers_dict[product] == manufacturer:
                 ui.tally_field.insert(tk.END, f' {qty : ^5}{product}\n')
-    ui.tally_field.insert(tk.END, f' Other: {manufacturer_tally.get("NULL")}\n')
+    ui.tally_field.insert(tk.END, f' Other: {manufacturer_tally.get("None")}\n')
     for product, qty in product_tally.items():
         if not manufacturers_dict[product]:
             ui.tally_field.insert(tk.END, f' {qty : ^5}{product}\n')
 
 def fetch_processing_order_data():
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-        'Content-Type': 'application/json'
-    }
     orders = []
     comment_dict = {}
     # Define the search criteria for processing orders created in the last 6 months
@@ -135,10 +131,6 @@ def tally_products_api(order_details):
     return sorted_product_tally, product_revenue
 
 def fetch_product_manufacturer(product_sku):
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-        'Content-Type': 'application/json'
-    }
     endpoint = f'/rest/V1/products/{product_sku}'
     response = requests.get(f'{base_url}{endpoint}', headers=headers)
     if response.status_code != 200:
