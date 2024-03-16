@@ -27,18 +27,14 @@ class UI:
     def generate_main_ui_elements(self):
         self.tally_field: tk.Text = tk.Text(self.window, height = 32, width = 120, font=('calibre',12))
         self.tally_field.grid(row=0, rowspan=3,column=1, columnspan=3)
-        self.file_label = tk.Label(self.window, text='SQL file: ')
-        self.file_label.grid(row=5, column=0, columnspan=1)
-        self.file_field = tk.Text(self.window, height = 1, width = 120, font=('calibre',12))
-        self.file_field.grid(row=5, column=1, columnspan=2)
         self.count_label = tk.Label(self.window, text='Products:')
-        self.count_label.grid(row=6, column=0)
+        self.count_label.grid(row=5, column=0)
         self.count_field = tk.Text(self.window, height = 1, width = 120, font=('calibre',12))
-        self.count_field.grid(row=6, column=1, columnspan=2)
+        self.count_field.grid(row=5, column=1, columnspan=2)
         self.revenue_label = tk.Label(self.window, text='Revenue:')
-        self.revenue_label.grid(row=7, column=0)
+        self.revenue_label.grid(row=6, column=0)
         self.revenue_field = tk.Text(self.window, height = 1, width = 120, font=('calibre',12))
-        self.revenue_field.grid(row=7, column=1, columnspan=2)
+        self.revenue_field.grid(row=6, column=1, columnspan=2)
 
 
 def sort_by_seller(product_tally):
