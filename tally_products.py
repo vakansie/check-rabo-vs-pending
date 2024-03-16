@@ -6,8 +6,9 @@ from manufacturer_dict import manufacturer_dict
 manufacturers_dict = {}
 manufacturer_tally = Counter()
 
-base_url = 'https://mywebsite.com'
-access_token = 'asdasdf'
+base_url = 'https://my_magento_website.com'
+# Get token by creating an integration in magento. On the Admin panel, click System. In the Extensions section, select Integrations.
+access_token = 'asdasdf' 
 headers = {
         'Authorization': f'Bearer {access_token}',
         'Content-Type': 'application/json'
@@ -48,7 +49,7 @@ def sort_by_seller(product_tally):
         for product, qty in product_tally.items():
             if manufacturers_dict[product] == manufacturer:
                 ui.tally_field.insert(tk.END, f' {qty : ^5}{product}\n')
-    ui.tally_field.insert(tk.END, f' Other: {manufacturer_tally.get("None")}\n')
+    ui.tally_field.insert(tk.END, f' Other: {manufacturer_tally.get(0)}\n')
     for product, qty in product_tally.items():
         if not manufacturers_dict[product]:
             ui.tally_field.insert(tk.END, f' {qty : ^5}{product}\n')
@@ -56,7 +57,7 @@ def sort_by_seller(product_tally):
 def fetch_processing_order_data():
     orders = []
     comment_dict = {}
-    # Define the search criteria for processing orders created in the last 6 months
+    # Define the search criteria for processing orders
     search_criteria = (
         '?searchCriteria[filter_groups][0][filters][0][field]=status'
         '&searchCriteria[filter_groups][0][filters][0][value]=processing'
@@ -65,7 +66,6 @@ def fetch_processing_order_data():
     # Make the GET request to the /V1/orders endpoint with the search criteria
     order_data = requests.get(f'{base_url}/rest/V1/orders{search_criteria}', headers=headers).json()
     for order in order_data.get('items', []):
-        # print(order)
         order_info = {
             'customer_comment': order.get('osc_order_comment', ""),
             'order_number': order.get('increment_id'),
@@ -83,7 +83,6 @@ def fetch_processing_order_data():
         product_details = []
         # Iterate over each item in the order to extract product details
         for item in order.get('items', []):
-            # print(item)
             if item['product_type'] != 'simple': continue
             product_info = {
                 'product_name': item['name'],
@@ -111,7 +110,6 @@ def tally_products_api(order_details):
     product_tally = Counter()
     product_revenue = 0
     for order in order_details:
-        # print(order)
         for product in order['products']:
             try:
                 product_name = product['product_name']
@@ -137,8 +135,8 @@ def fetch_product_manufacturer(product_sku):
         return f"Failed to retrieve product details. Status code: {response.status_code}"
     product_details = response.json()
     custom_attributes = product_details.get('custom_attributes', [])
-    manufacturer_value = next((attr['value'] for attr in custom_attributes if attr['attribute_code'] == 'manufacturer'), None)
-    return manufacturer_value if manufacturer_value else None
+    manufacturer_value = next((attr['value'] for attr in custom_attributes if attr['attribute_code'] == 'manufacturer'), 0)
+    return manufacturer_value if manufacturer_value else 0
 
 def main():
     global ui
